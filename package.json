@@ -6,7 +6,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "cspell --no-progress . && next lint"
     },
     "dependencies": {
         "next": "14.2.3",
@@ -14,9 +14,11 @@
         "react-dom": "^18"
     },
     "devDependencies": {
+        "@cspell/dict-html": "^4.0.5",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
+        "cspell": "^8.8.3",
         "eslint": "^8",
         "eslint-config-next": "14.2.3",
         "postcss": "^8",

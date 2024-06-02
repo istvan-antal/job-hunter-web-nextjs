@@ -1,0 +1,25 @@
+{
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+    "version": "0.2",
+    "language": "en",
+    "dictionaries": [
+        "corp-terms",
+        "fonts",
+        "typescript",
+        "fullstack",
+        "html"
+    ],
+    "import": [
+        "./node_modules/@cspell/dict-html/cspell-ext.json"
+    ],
+    "words": [
+        "biomejs",
+        "István",
+        "Antal"
+    ],
+    "useGitignore": true,
+    "ignorePaths": [
+        ".vscode",
+        "./tsconfig.json"
+    ]
+}
