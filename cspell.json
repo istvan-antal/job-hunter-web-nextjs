@@ -13,9 +13,10 @@
         "./node_modules/@cspell/dict-html/cspell-ext.json"
     ],
     "words": [
+        "Antal",
         "biomejs",
-        "István",
-        "Antal"
+        "clsx",
+        "István"
     ],
     "useGitignore": true,
     "ignorePaths": [
