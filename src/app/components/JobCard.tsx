@@ -1,6 +1,6 @@
 'use client';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Job } from '../../lib/job';
 import { applyToJob, dismissJob } from '../actions';
 import { PayRateView } from './PayRateView';
@@ -10,33 +10,40 @@ enum JobState {
     Default = 0,
     Dismissing = 1,
     Dismissed = 2,
+    Active = 3,
 }
 
 const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) => {
     const [jobState, setJobState] = useState(JobState.Default);
+    const didClickOnActionButton = useRef(false);
 
     return (
         <div
+            onClick={() => {
+                if (!didClickOnActionButton.current) {
+                    setJobState(JobState.Active);
+                }
+
+                didClickOnActionButton.current = false;
+            }}
             className={clsx(
                 'flex flex-col bg-white border shadow-sm rounded-xl p-4 md:p-5 dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70',
                 {
                     'opacity-50': jobState === JobState.Dismissing,
                     'opacity-10': jobState === JobState.Dismissed,
+                    'bg-gray-50 dark:bg-neutral-800': jobState === JobState.Active,
                 },
             )}
         >
-            <div
-                className={clsx('flex gap-5', {
-                    'opacity-50': jobState === JobState.Dismissing,
-                    'opacity-10': jobState === JobState.Dismissed,
-                })}
-            >
+            <div className="flex gap-5">
                 <div className="shrink-0">
                     <div className="flex flex-col items-start gap-2">
                         <PayRateView job={job} />
                         <div className="inline-flex rounded-lg shadow-sm">
                             <button
                                 onClick={() => {
+                                    didClickOnActionButton.current = true;
+
                                     setJobState(JobState.Dismissing);
 
                                     applyToJob(job)
@@ -55,6 +62,8 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                             </button>
                             <button
                                 onClick={() => {
+                                    didClickOnActionButton.current = true;
+
                                     setJobState(JobState.Dismissing);
 
                                     dismissJob(job)
