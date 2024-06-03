@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import type { Job } from '../../lib/job';
-import JobRow from './JobRow';
+import JobCard from './JobCard';
 
 export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
     const [jobs, setJobs] = useState(incomingJobs);
@@ -12,7 +12,7 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
             <div className="fixed top-5 right-5 backdrop-blur">New jobs: {jobs.length}</div>
             <main className="flex flex-col gap-5 p-8">
                 {jobs.map(job => (
-                    <JobRow
+                    <JobCard
                         key={job._id as unknown as string}
                         job={job}
                         onRemove={job => {

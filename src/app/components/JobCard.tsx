@@ -12,7 +12,7 @@ enum JobState {
     Dismissed = 2,
 }
 
-const JobRow = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) => {
+const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) => {
     const [jobState, setJobState] = useState(JobState.Default);
 
     return (
@@ -89,4 +89,4 @@ const JobRow = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) =
     );
 };
 
-export default JobRow;
+export default JobCard;
