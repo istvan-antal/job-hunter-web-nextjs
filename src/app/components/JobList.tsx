@@ -1,12 +1,38 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Job } from '../../lib/job';
+import { findJobsForBoard } from '../actions';
 import JobCard from './JobCard';
 
 export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
-    const [allJobs, setJobs] = useState(incomingJobs);
+    const [allJobs, setAllJobs] = useState(incomingJobs);
     const [contractOnly, setContractOnly] = useState(false);
+
+    useEffect(() => {
+        let mounted = true;
+
+        function refresh() {
+            if (mounted) {
+                findJobsForBoard()
+                    .then(jobs => {
+                        setAllJobs(jobs);
+                    })
+                    .catch(error => {
+                        throw error;
+                    })
+                    .finally(() => {
+                        setTimeout(refresh, 10_000);
+                    });
+            }
+        }
+        const refreshHandle = setTimeout(refresh, 10_000);
+
+        return () => {
+            mounted = false;
+            clearTimeout(refreshHandle);
+        };
+    }, []);
 
     const jobs = contractOnly ? allJobs.filter(job => job.pay_rate.type === 'daily') : allJobs;
 
@@ -47,8 +73,7 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
                         key={job._id as unknown as string}
                         job={job}
                         onRemove={job => {
-                            console.log('onRemove', job);
-                            setJobs(jobs.filter(current => current !== job));
+                            setAllJobs(jobs.filter(current => current !== job));
                         }}
                     />
                 ))}

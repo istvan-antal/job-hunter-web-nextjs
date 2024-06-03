@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useRef, useState } from 'react';
 import type { Job } from '../../lib/job';
 import { applyToJob, dismissJob } from '../actions';
+import { ElapsedTime } from './ElapsedTime';
 import { PayRateView } from './PayRateView';
 import { SourceIcon } from './SourceIcon';
 
@@ -31,7 +32,7 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                 {
                     'opacity-50': jobState === JobState.Dismissing,
                     'opacity-10': jobState === JobState.Dismissed,
-                    'bg-gray-50 dark:bg-neutral-800': jobState === JobState.Active,
+                    'bg-gray-50 dark:bg-indigo-800': jobState === JobState.Active,
                 },
             )}
         >
@@ -94,6 +95,7 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                         className="text-gray-500 dark:text-neutral-400"
                         dangerouslySetInnerHTML={{ __html: job.description }}
                     ></div>
+                    <ElapsedTime time={new Date(job.created)} />
                 </div>
             </div>
         </div>
