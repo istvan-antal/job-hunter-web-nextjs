@@ -34,9 +34,8 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                 <div className="shrink-0">
                     <div className="flex flex-col items-start gap-2">
                         <PayRateView job={job} />
-                        <div className="flex gap-3">
+                        <div className="inline-flex rounded-lg shadow-sm">
                             <button
-                                className="flex items-center"
                                 onClick={() => {
                                     setJobState(JobState.Dismissing);
 
@@ -49,11 +48,12 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                                             throw error;
                                         });
                                 }}
+                                type="button"
+                                className="py-2 px-3 inline-flex items-center gap-x-2 -ms-px first:rounded-s-lg first:ms-0 last:rounded-e-lg text-sm font-medium focus:z-10 border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                             >
                                 <img src="/apply.svg" alt="apply" />
                             </button>
                             <button
-                                className="flex items-center"
                                 onClick={() => {
                                     setJobState(JobState.Dismissing);
 
@@ -66,6 +66,8 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                                             throw error;
                                         });
                                 }}
+                                type="button"
+                                className="py-2 px-3 inline-flex items-center gap-x-2 -ms-px first:rounded-s-lg first:ms-0 last:rounded-e-lg text-sm font-medium focus:z-10 border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                             >
                                 <img src="/dismiss.svg" alt="dismiss" />
                             </button>
