@@ -1,10 +1,10 @@
 'use client';
 import clsx from 'clsx';
 import { useState } from 'react';
-import type { Job } from '../lib/job';
+import type { Job } from '../../lib/job';
+import { applyToJob, dismissJob } from '../actions';
 import { PayRateView } from './PayRateView';
 import { SourceIcon } from './SourceIcon';
-import { applyToJob, dismissJob } from './actions';
 
 enum JobState {
     Default = 0,

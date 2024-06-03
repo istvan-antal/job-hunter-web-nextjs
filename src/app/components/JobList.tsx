@@ -1,8 +1,8 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
-import type { Job } from '../lib/job';
-import JobRow from './job-row';
+import type { Job } from '../../lib/job';
+import JobRow from './JobRow';
 
 export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
     const [jobs, setJobs] = useState(incomingJobs);

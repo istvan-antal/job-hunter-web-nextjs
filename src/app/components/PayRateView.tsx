@@ -1,5 +1,5 @@
-import type { Job } from '../lib/job';
-import type { Currency } from '../lib/pay-rate';
+import type { Job } from '../../lib/job';
+import type { Currency } from '../../lib/pay-rate';
 
 const currencySymbols = new Map<Currency, string>([
     ['GBP', '£'],
