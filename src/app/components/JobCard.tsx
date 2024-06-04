@@ -32,7 +32,7 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                 {
                     'opacity-50': jobState === JobState.Dismissing,
                     'opacity-10': jobState === JobState.Dismissed,
-                    'bg-gray-50 dark:bg-indigo-800': jobState === JobState.Active,
+                    'bg-gray-50 dark:bg-indigo-900': jobState === JobState.Active,
                 },
             )}
         >

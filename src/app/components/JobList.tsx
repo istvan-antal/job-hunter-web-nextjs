@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Job } from '../../lib/job';
 import { findJobsForBoard } from '../actions';
 import JobCard from './JobCard';
@@ -9,14 +9,21 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
     const [allJobs, setAllJobs] = useState(incomingJobs);
     const [contractOnly, setContractOnly] = useState(false);
 
+    const updateId = useRef(0);
+
     useEffect(() => {
         let mounted = true;
 
         function refresh() {
+            const currentUpdateId = Date.now();
+            updateId.current = currentUpdateId;
+
             if (mounted) {
                 findJobsForBoard()
                     .then(jobs => {
-                        setAllJobs(jobs);
+                        if (updateId.current === currentUpdateId) {
+                            setAllJobs(jobs);
+                        }
                     })
                     .catch(error => {
                         throw error;
@@ -34,7 +41,32 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
         };
     }, []);
 
-    const jobs = contractOnly ? allJobs.filter(job => job.pay_rate.type === 'daily') : allJobs;
+    const sources = Array.from(new Set(allJobs.map(job => job.source)));
+
+    const sourceStats = new Map(sources.map(source => [source, 0]));
+
+    for (const job of allJobs) {
+        sourceStats.set(job.source, sourceStats.get(job.source)! + 1);
+    }
+
+    const [selectedSource, setSelectedSource] = useState('');
+
+    const jobs =
+        contractOnly || selectedSource
+            ? allJobs.filter(job => {
+                  let result = true;
+
+                  if (contractOnly) {
+                      result = job.pay_rate.type === 'daily';
+                  }
+
+                  if (selectedSource) {
+                      result = result && job.source === selectedSource;
+                  }
+
+                  return result;
+              })
+            : allJobs;
 
     return (
         <>
@@ -45,6 +77,14 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
                             <a className="flex-none text-xl font-semibold dark:text-white" href="#">
                                 Job Hunter
                             </a>
+                            <Image
+                                className="relative dark:invert"
+                                src="/next.svg"
+                                alt="Next.js Logo"
+                                width={45}
+                                height={9.25}
+                                priority
+                            />
                             <div className="flex">
                                 <input
                                     type="checkbox"
@@ -62,6 +102,22 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
                                     Contract only
                                 </label>
                             </div>
+                            <div>
+                                <select
+                                    value={selectedSource}
+                                    onChange={event => {
+                                        setSelectedSource(event.target.value);
+                                    }}
+                                    className="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                >
+                                    <option>Source</option>
+                                    {sources.map(value => (
+                                        <option key={value} value={value}>
+                                            {value} ({sourceStats.get(value)})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                         <div>New jobs: {jobs.length}</div>
                     </div>
@@ -73,18 +129,11 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
                         key={job._id as unknown as string}
                         job={job}
                         onRemove={job => {
-                            setAllJobs(jobs.filter(current => current !== job));
+                            updateId.current = 0;
+                            setAllJobs(allJobs.filter(current => current !== job));
                         }}
                     />
                 ))}
-                <Image
-                    className="relative dark:invert"
-                    src="/next.svg"
-                    alt="Next.js Logo"
-                    width={90}
-                    height={18.5}
-                    priority
-                />
             </main>
         </>
     );
