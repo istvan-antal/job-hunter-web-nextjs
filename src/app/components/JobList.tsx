@@ -123,7 +123,7 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
                     </div>
                 </nav>
             </header>
-            <main className="flex flex-col gap-5 p-8 pt-20">
+            <main className="flex flex-col gap-5 p-8 pt-24">
                 {jobs.map(job => (
                     <JobCard
                         key={job._id as unknown as string}

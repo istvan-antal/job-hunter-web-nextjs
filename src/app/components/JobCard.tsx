@@ -38,7 +38,7 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
         >
             <div className="flex gap-5">
                 <div className="shrink-0">
-                    <div className="flex flex-col items-start gap-2">
+                    <div className="flex flex-col items-start gap-4">
                         <PayRateView job={job} />
                         <div className="inline-flex rounded-lg shadow-sm">
                             <button
@@ -82,6 +82,7 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                                 <img src="/dismiss.svg" alt="dismiss" />
                             </button>
                         </div>
+                        <ElapsedTime time={new Date(job.created)} />
                     </div>
                 </div>
                 <div className="flex flex-col items-start gap-2">
@@ -95,7 +96,6 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                         className="text-gray-500 dark:text-neutral-400"
                         dangerouslySetInnerHTML={{ __html: job.description }}
                     ></div>
-                    <ElapsedTime time={new Date(job.created)} />
                 </div>
             </div>
         </div>
