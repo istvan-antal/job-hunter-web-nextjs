@@ -28,10 +28,11 @@ const JobCard = ({ job, onRemove }: { job: Job; onRemove: (job: Job) => void }) 
                 didClickOnActionButton.current = false;
             }}
             className={clsx(
-                'flex flex-col bg-white border shadow-sm rounded-xl p-4 md:p-5 dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70',
+                'flex flex-col  border shadow-sm rounded-xl p-4 md:p-5 dark:border-neutral-700 dark:shadow-neutral-700/70',
                 {
-                    'opacity-50': jobState === JobState.Dismissing,
-                    'opacity-10': jobState === JobState.Dismissed,
+                    'bg-white dark:bg-neutral-900': jobState === JobState.Default,
+                    'bg-white dark:bg-neutral-900 opacity-50': jobState === JobState.Dismissing,
+                    'bg-white dark:bg-neutral-900 opacity-10': jobState === JobState.Dismissed,
                     'bg-gray-50 dark:bg-indigo-900': jobState === JobState.Active,
                 },
             )}
