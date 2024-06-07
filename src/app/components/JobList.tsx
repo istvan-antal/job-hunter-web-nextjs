@@ -11,6 +11,38 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
 
     const updateId = useRef(0);
 
+    const canNotify = useRef(false);
+    const isDocumentVisible = useRef(true);
+
+    const currentNotification = useRef<Notification | undefined>(undefined);
+
+    useEffect(() => {
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then(result => {
+                canNotify.current = result === 'granted';
+            });
+        }
+    });
+
+    useEffect(() => {
+        document.addEventListener('visibilitychange', () => {
+            isDocumentVisible.current = document.visibilityState === 'visible';
+            if (isDocumentVisible.current) {
+                //The tab has become visible so clear the now-stale Notification.
+                currentNotification.current?.close();
+                currentNotification.current = undefined;
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (canNotify.current && !isDocumentVisible.current) {
+            const notification = new Notification('New jobs!');
+            currentNotification.current = notification;
+        }
+        document.body.title = allJobs.length ? `(${allJobs.length}) Job Hunter Web Next` : 'Job Hunter Web Next';
+    }, [allJobs.length]);
+
     useEffect(() => {
         let mounted = true;
 
@@ -46,6 +78,7 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
     const sourceStats = new Map(sources.map(source => [source, 0]));
 
     for (const job of allJobs) {
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         sourceStats.set(job.source, sourceStats.get(job.source)! + 1);
     }
 
