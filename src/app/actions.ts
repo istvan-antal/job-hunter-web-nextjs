@@ -38,3 +38,41 @@ export async function applyToJob(job: Job) {
         { $set: { applied: true, hidden: true, updated: new Date() } },
     );
 }
+
+export async function fetchStats() {
+    const collection = (await connectToDatabase()).collection('jobs');
+
+    const result = (
+        await (
+            await collection.aggregate([
+                {
+                    $match: {
+                        applied: {
+                            $eq: true,
+                        },
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: { format: '%Y-%m-%d', date: '$updated' },
+                        },
+                        count: {
+                            $count: {},
+                        },
+                    },
+                },
+                {
+                    $sort: {
+                        _id: 1,
+                    },
+                },
+            ])
+        ).toArray()
+    ).map(item => ({
+        date: item._id,
+        count: item.count,
+    }));
+
+    return result;
+}

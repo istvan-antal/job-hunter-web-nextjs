@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type { Job } from '../../lib/job';
 import { findJobsForBoard } from '../actions';
@@ -118,6 +119,7 @@ export const JobList = ({ jobs: incomingJobs }: { jobs: Job[] }) => {
                                 height={9.25}
                                 priority
                             />
+                            <Link href="/stats">Stats</Link>
                             <div className="flex">
                                 <input
                                     type="checkbox"

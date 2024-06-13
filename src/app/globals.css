@@ -26,3 +26,7 @@ body {
         text-wrap: balance;
     }
 }
+
+.jobs-premium-company-insights__row-container {
+    display: none;
+}
